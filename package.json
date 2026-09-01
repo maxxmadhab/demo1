@@ -1,0 +1,19 @@
+{
+  "name": "jwel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Jwel fine jewellery catalog — React frontend + Express/Supabase-ready backend",
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build": "npm run build:frontend && npm run build:backend",
+    "typecheck:frontend": "npm --prefix frontend run typecheck",
+    "typecheck:backend": "npm --prefix backend run typecheck",
+    "typecheck": "npm run typecheck:frontend && npm run typecheck:backend"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

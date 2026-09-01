@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "jwel-frontend": "file:.."
+  }
+}
