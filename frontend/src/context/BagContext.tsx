@@ -9,7 +9,7 @@ import {
 } from "react";
 import type { Product } from "@/types/product";
 
-const STORAGE_KEY = "jwel:bag";
+const STORAGE_KEY = "budhram:bag";
 
 export interface BagItem {
   product: Product;

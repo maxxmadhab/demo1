@@ -14,7 +14,7 @@ export const createServer = () => {
   app.use(express.urlencoded({ extended: true }));
 
   app.get("/", (_req, res) => {
-    res.json({ service: "jwel-api", status: "running" });
+    res.json({ service: "budhram-api", status: "running" });
   });
 
   app.use("/api", routes);
@@ -28,6 +28,6 @@ export const createServer = () => {
 if (process.env.NODE_ENV !== "test") {
   const app = createServer();
   app.listen(env.port, () => {
-    console.log(`[jwel-api] listening on http://localhost:${env.port} (${env.nodeEnv})`);
+    console.log(`[budhram-api] listening on http://localhost:${env.port} (${env.nodeEnv})`);
   });
 }

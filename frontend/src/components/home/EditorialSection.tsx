@@ -16,7 +16,7 @@ interface EditorialSectionProps {
 export function EditorialSection({
   eyebrow = "The atelier edit",
   title = "Crafted for moments that matter",
-  body = "Each Jwel creation is cut, set and finished entirely by hand — a single luminous stroke from raw stone to final glow.",
+  body = "Each Budhram creation is cut, set and finished entirely by hand — a single luminous stroke from raw stone to final glow.",
   cta = { label: "Explore the collection", to: "/catalog" },
   image = img("ringCushion", { w: 1600, h: 2000 }),
   variant = "full",

@@ -20,7 +20,7 @@ export function Hero() {
       <motion.div style={reducedMotion ? undefined : { y }} className="absolute inset-0">
         <ImageWithFallback
           src={img("necklaceModel", { w: 1920, h: 1280, crop: "faces" })}
-          alt="A model wearing fine Jwel diamond jewellery"
+          alt="A model wearing fine Budhram diamond jewellery"
           className="h-[115%] w-full object-cover"
           loading="eager"
           fetchPriority="high"

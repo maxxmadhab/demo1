@@ -1,8 +1,8 @@
 {
-  "name": "jwel",
+  "name": "budhram",
   "version": "0.1.0",
   "private": true,
-  "description": "Jwel fine jewellery catalog — React frontend + Express/Supabase-ready backend",
+  "description": "Budhram fine jewellery catalog — React frontend + Express/Supabase-ready backend",
   "scripts": {
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",

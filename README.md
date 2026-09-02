@@ -1,4 +1,4 @@
-# Demo1 — Jwel
+# Demo1 — Budhram
 
 A production-quality premium fine jewellery catalog website. React + Vite + TypeScript + Tailwind CSS v4 + Motion frontend backed by an Express + TypeScript API foundation that is Supabase-ready.
 

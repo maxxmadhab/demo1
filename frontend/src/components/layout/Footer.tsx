@@ -47,7 +47,7 @@ export function Footer() {
               The Editor's Letter
             </p>
             <h2 className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">
-              Join the world of Jwel
+              Join the world of Budhram
             </h2>
             <p className="mt-3 font-body text-sm font-light leading-relaxed text-ivory/60">
               Receive private previews, stories from the atelier, and invitations to

@@ -19,7 +19,7 @@ export interface ContactConfig {
  * Update business contact details here so they propagate everywhere.
  */
 export const siteConfig = {
-  brandName: "Jwel",
+  brandName: "Budhram",
   tagline: "Fine Jewelry Maison",
   phone: "7489872020",
   phoneDisplay: "7489872020",
@@ -27,9 +27,9 @@ export const siteConfig = {
   address: "12, Heritage Lane, Connaught Place",
   city: "New Delhi, India 110001",
   social: {
-    instagram: "https://instagram.com/jwel",
-    pinterest: "https://pinterest.com/jwel",
-    facebook: "https://facebook.com/jwel",
+    instagram: "https://instagram.com/budhram",
+    pinterest: "https://pinterest.com/budhram",
+    facebook: "https://facebook.com/budhram",
   },
   hours: "Mon – Sat · 10:00 AM – 8:00 PM",
 } satisfies ContactConfig;

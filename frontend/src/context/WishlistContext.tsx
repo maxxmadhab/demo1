@@ -9,7 +9,7 @@ import {
 } from "react";
 import type { Product } from "@/types/product";
 
-const STORAGE_KEY = "jwel:wishlist";
+const STORAGE_KEY = "budhram:wishlist";
 
 interface WishlistContextValue {
   items: Product[];

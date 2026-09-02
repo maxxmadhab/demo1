@@ -1,9 +1,9 @@
 {
-  "name": "jwel-backend",
+  "name": "budhram-backend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Jwel fine jewellery API - Express foundation (Supabase-ready)",
+  "description": "Budhram fine jewellery API - Express foundation (Supabase-ready)",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",

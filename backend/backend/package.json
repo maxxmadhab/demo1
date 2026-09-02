@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "jwel-backend": "file:.."
+    "budhram-backend": "file:.."
   }
 }
