@@ -1,6 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import type { Profile, AuthResult } from "@/types/auth";
 
+const appOrigin = () =>
+  (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") ||
+  window.location.origin;
+
 export async function signIn(email: string, password: string): Promise<AuthResult> {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
@@ -38,7 +42,7 @@ export async function signInWithGoogle(): Promise<AuthResult> {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${window.location.origin}`,
+      redirectTo: appOrigin(),
       queryParams: { prompt: "select_account" },
     },
   });
@@ -54,7 +58,7 @@ export async function signOut(): Promise<void> {
 
 export async function resetPassword(email: string): Promise<AuthResult> {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/reset-password`,
+    redirectTo: `${appOrigin()}/reset-password`,
   });
   if (error) {
     return { error: "Failed to send reset email. Please try again." };

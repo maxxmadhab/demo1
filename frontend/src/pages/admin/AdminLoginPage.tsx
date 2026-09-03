@@ -1,22 +1,18 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthConfigNotice } from "@/components/auth/AuthConfigNotice";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 
 export default function AdminLoginPage() {
-  const { signIn, isAuthenticated, isAdmin } = useAuth();
+  const { signIn, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  if (isAuthenticated && isAdmin) {
-    return <Navigate to="/admin" replace />;
-  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,6 +22,9 @@ export default function AdminLoginPage() {
     setLoading(false);
     if (result.error) {
       setError(result.error);
+    } else if (!isAdmin) {
+      setError("This account does not have admin access.");
+      setPassword("");
     } else {
       navigate("/admin", { replace: true });
     }

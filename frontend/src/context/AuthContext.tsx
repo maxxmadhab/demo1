@@ -57,9 +57,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = useCallback(
     async (email: string, password: string): Promise<AuthResult> => {
       const result = await authService.signIn(email, password);
-      return result;
+      if (result.error) return result;
+
+      // Wait for the session + profile to be fully loaded so callers can
+      // immediately trust role/isAdmin (avoids bouncing admins out of /admin).
+      const session = await supabase.auth.getSession();
+      const u = session.data.session?.user;
+      if (u) {
+        const authUser: AuthUser = {
+          id: u.id,
+          email: u.email,
+          user_metadata: u.user_metadata ?? {},
+        };
+        setUser(authUser);
+        await loadProfile(authUser);
+      }
+      return {};
     },
-    [],
+    [loadProfile],
   );
 
   const signUp = useCallback(
