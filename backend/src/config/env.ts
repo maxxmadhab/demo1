@@ -12,6 +12,10 @@ export const env = {
   nodeEnv: required("NODE_ENV", "development"),
   port: Number(required("PORT", "4000")),
   clientOrigin: required("CLIENT_ORIGIN", "http://localhost:5173"),
+  corsOrigins: (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim().replace(/\/$/, ""))
+    .filter(Boolean),
 
   supabase: {
     url: process.env.SUPABASE_URL ?? "",

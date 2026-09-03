@@ -9,8 +9,13 @@ export const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
     const allowed = new Set([
       env.clientOrigin,
+      ...env.corsOrigins,
+      "https://frontend-tan-two-73.vercel.app",
+      "https://budhrambackend.onrender.com",
       "http://localhost:5173",
       "http://127.0.0.1:5173",
+      "http://localhost:4000",
+      "http://127.0.0.1:4000",
     ]);
 
     // Allow same-origin / server-to-server requests without an Origin header.
