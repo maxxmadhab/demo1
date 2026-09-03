@@ -100,16 +100,24 @@ Alternatively, create the admin via an RPC function protected by the service rol
 
 ### 3. Configure environment variables
 
-#### Frontend (`frontend/.env`)
+#### Frontend (`frontend/.env` for local, `frontend/.env.production` for builds)
 
 ```env
-VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=<your-anon/publishable-key>
+VITE_SUPABASE_URL=https://anyhsbherjbcfqynbqed.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
 
 These are **public** keys — safe for the browser. RLS protects the actual data.
 
-> **Never** put `SUPABASE_SERVICE_ROLE_KEY` or any secret key in frontend env vars.
+> **Never** put `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_SECRET_KEY`, or the `DATABASE_URL`
+> password in frontend env vars.
+
+**For deploy (Vercel):** Vite bakes `import.meta.env.VITE_*` in at **build time**.
+Because the values are public, `frontend/.env.production` is committed to the repo and
+Vite auto-loads it during `vite build`, so production deployments get correct credentials
+even if the platform's env-var panel isn't populated. To override, you can instead set
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in Vercel's Environment Variables
+(Production scope) — same values, and it takes precedence.
 
 #### Backend (`backend/.env`)
 
@@ -121,6 +129,10 @@ SUPABASE_URL=https://<ref>.supabase.co
 SUPABASE_ANON_KEY=<anon key>
 SUPABASE_SERVICE_ROLE_KEY=<service role key>   # server-only, never ship to client
 ```
+
+> The `DATABASE_URL` is **not** a Supabase HTTP URL and must **never** be used in the
+> frontend — it exposes the Postgres superuser password. The browser uses
+> `VITE_SUPABASE_URL` + publishable key instead.
 
 ---
 
