@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { AuthConfigNotice } from "@/components/auth/AuthConfigNotice";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 
@@ -49,6 +50,10 @@ export default function AdminLoginPage() {
         <p className="mb-8 text-center font-body text-sm text-mist">
           Authorized personnel only
         </p>
+
+        <div className="[&_div]:text-amber-200 [&_div]:bg-amber-950/40 [&_div]:border-amber-700/50 [&_code]:text-amber-100">
+          <AuthConfigNotice />
+        </div>
 
         {error && (
           <div className="mb-6 border border-red-400/30 bg-red-900/20 px-4 py-3 font-body text-sm text-red-300">

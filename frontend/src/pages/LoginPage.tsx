@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { AuthConfigNotice } from "@/components/auth/AuthConfigNotice";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
@@ -53,6 +54,8 @@ export default function LoginPage() {
         <p className="mb-8 text-center font-body text-sm text-stone">
           Sign in to your account
         </p>
+
+        <AuthConfigNotice />
 
         {error && (
           <div className="mb-6 border border-red-200 bg-red-50 px-4 py-3 font-body text-sm text-red-600">
