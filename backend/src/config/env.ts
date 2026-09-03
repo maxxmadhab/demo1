@@ -13,7 +13,6 @@ export const env = {
   port: Number(required("PORT", "4000")),
   clientOrigin: required("CLIENT_ORIGIN", "http://localhost:5173"),
 
-  // Supabase — used only on the server (service role key never leaves the backend).
   supabase: {
     url: process.env.SUPABASE_URL ?? "",
     anonKey: process.env.SUPABASE_ANON_KEY ?? "",

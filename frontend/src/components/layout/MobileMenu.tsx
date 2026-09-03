@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useUI } from "@/context/UIContext";
 import { useWishlist } from "@/context/WishlistContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useEscapeKey } from "@/hooks/useOverlayBehavior";
 import { siteConfig } from "@/config/site";
 import { collections as collectionsData } from "@/data/collections";
@@ -22,6 +23,7 @@ const CATEGORY_LINKS = [
 export function MobileMenu() {
   const { mobileMenuOpen, setMobileMenuOpen, setSearchOpen } = useUI();
   const { count } = useWishlist();
+  const { isAuthenticated, isAdmin, signOut } = useAuth();
   const reducedMotion = useReducedMotion();
   const [accordion, setAccordion] = useState<string | null>(null);
 
@@ -169,6 +171,37 @@ export function MobileMenu() {
                   </span>
                 )}
               </Link>
+
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 py-3 font-display text-3xl font-medium text-gold-deep"
+                >
+                  Admin Dashboard
+                </Link>
+              )}
+
+              {isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    signOut();
+                  }}
+                  className="flex w-full items-center gap-3 py-3 text-left font-display text-3xl font-medium text-charcoal"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block py-3 font-display text-3xl font-medium text-charcoal"
+                >
+                  Login
+                </Link>
+              )}
 
               <Link
                 to="/contact"

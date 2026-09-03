@@ -1,25 +1,37 @@
 ﻿import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { env } from "../config/env.js";
 
-let client: SupabaseClient | null = null;
+let serviceClient: SupabaseClient | null = null;
+let anonClient: SupabaseClient | null = null;
 
 /**
- * Server-side Supabase client (bootstrap only).
- *
- * Wired up lazily so the backend runs cleanly before Supabase credentials
- * are provided. Uses the anon key by default and the service role key only
- * for server-to-server operations that require elevated privileges.
+ * Server-side Supabase client using the service role key.
+ * Used for elevated-privilege operations (admin verification, profile management).
  */
 export function getSupabase(): SupabaseClient | null {
-  if (client) return client;
+  if (serviceClient) return serviceClient;
   if (!env.supabase.url || (!env.supabase.anonKey && !env.supabase.serviceRoleKey)) {
     return null;
   }
-  client = createClient(env.supabase.url, env.supabase.serviceRoleKey || env.supabase.anonKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
+  serviceClient = createClient(
+    env.supabase.url,
+    env.supabase.serviceRoleKey || env.supabase.anonKey,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+  return serviceClient;
+}
+
+/**
+ * Server-side Supabase client using the anon key.
+ * Used for verifying user auth tokens (JWTs) via supabase.auth.getUser().
+ */
+export function getSupabaseAnon(): SupabaseClient | null {
+  if (anonClient) return anonClient;
+  if (!env.supabase.url || !env.supabase.anonKey) {
+    return null;
+  }
+  anonClient = createClient(env.supabase.url, env.supabase.anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
   });
-  return client;
+  return anonClient;
 }

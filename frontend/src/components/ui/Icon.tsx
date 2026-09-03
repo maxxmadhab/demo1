@@ -22,7 +22,9 @@ export type IconName =
   | "pinterest"
   | "facebook"
   | "filter"
-  | "eye";
+  | "eye"
+  | "logout"
+  | "user";
 
 const PATHS: Record<IconName, React.ReactNode> = {
   search: (
@@ -90,6 +92,12 @@ const PATHS: Record<IconName, React.ReactNode> = {
   ),
   eye: (
     <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Zm9.5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+  ),
+  logout: (
+    <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3m-5-4 4-4-4-4m4 4H4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+  ),
+  user: (
+    <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
   ),
 };
 

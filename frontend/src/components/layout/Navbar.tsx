@@ -5,6 +5,7 @@ import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { useWishlist } from "@/context/WishlistContext";
 import { useBag } from "@/context/BagContext";
 import { useUI } from "@/context/UIContext";
+import { useAuth } from "@/hooks/useAuth";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
 import { collections as collectionsData } from "@/data/collections";
@@ -23,6 +24,7 @@ export function Navbar() {
   const { count } = useWishlist();
   const { count: bagCount } = useBag();
   const { setSearchOpen, setMobileMenuOpen, setBagOpen } = useUI();
+  const { isAuthenticated, isAdmin, signOut } = useAuth();
   const reducedMotion = useReducedMotion();
   const [collectionsOpen, setCollectionsOpen] = useState(false);
   const closeTimer = useRef<number | null>(null);
@@ -152,6 +154,15 @@ export function Navbar() {
 
           {/* Right — actions */}
           <div className="flex w-1/4 items-center justify-end gap-1 lg:w-32">
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="hidden font-body text-[0.62rem] font-medium uppercase tracking-[0.18em] text-gold-deep transition-colors duration-300 hover:text-gold lg:block"
+              >
+                Admin
+              </Link>
+            )}
+
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
@@ -187,6 +198,35 @@ export function Navbar() {
                 </span>
               )}
             </button>
+
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/"
+                  aria-label="Account"
+                  title="Account"
+                  className="relative flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-colors duration-300 hover:text-gold-deep lg:hidden"
+                >
+                  <Icon name="user" size={19} />
+                </Link>
+                <button
+                  type="button"
+                  onClick={signOut}
+                  aria-label="Sign out"
+                  title="Sign out"
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-colors duration-300 hover:text-gold-deep"
+                >
+                  <Icon name="logout" size={19} />
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden font-body text-[0.65rem] font-medium uppercase tracking-[0.15em] text-charcoal transition-colors duration-300 hover:text-gold-deep lg:block"
+              >
+                Login
+              </Link>
+            )}
 
             <button
               type="button"
