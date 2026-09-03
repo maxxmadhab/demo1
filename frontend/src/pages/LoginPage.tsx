@@ -121,6 +121,13 @@ export default function LoginPage() {
           Continue with Google
         </button>
 
+        <Link
+          to="/admin/login"
+          className="mt-3 flex w-full items-center justify-center border border-gold/40 bg-transparent py-3.5 font-body text-[0.72rem] font-medium uppercase tracking-[0.14em] text-gold-deep transition-colors duration-300 hover:border-gold hover:bg-gold/10"
+        >
+          Admin Login
+        </Link>
+
         <p className="mt-8 text-center font-body text-sm text-stone">
           Don&apos;t have an account?{" "}
           <Link
