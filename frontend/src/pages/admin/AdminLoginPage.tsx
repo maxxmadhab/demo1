@@ -2,11 +2,12 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthConfigNotice } from "@/components/auth/AuthConfigNotice";
+import { isAdminAccount } from "@/config/admin";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 
 export default function AdminLoginPage() {
-  const { signIn, isAdmin } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ export default function AdminLoginPage() {
     setLoading(false);
     if (result.error) {
       setError(result.error);
-    } else if (!isAdmin) {
+    } else if (!isAdminAccount(result.user?.email, result.user?.app_metadata?.role)) {
       setError("This account does not have admin access.");
       setPassword("");
     } else {

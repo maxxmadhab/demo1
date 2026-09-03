@@ -12,11 +12,14 @@ export interface Profile {
 export interface AuthUser {
   id: string;
   email: string | undefined;
+  app_metadata: Record<string, unknown>;
   user_metadata: Record<string, unknown>;
 }
 
 export interface AuthResult {
   error?: string;
+  user?: AuthUser | null;
+  profile?: Profile | null;
 }
 
 export interface AuthContextValue {

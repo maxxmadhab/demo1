@@ -1,12 +1,12 @@
 import { supabase } from "@/lib/supabase";
-import type { Profile, AuthResult } from "@/types/auth";
+import type { AuthResult, AuthUser } from "@/types/auth";
 
 const appOrigin = () =>
   (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") ||
   window.location.origin;
 
 export async function signIn(email: string, password: string): Promise<AuthResult> {
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
     if (error.message.includes("Invalid login")) {
       return { error: "Invalid email or password." };
@@ -16,7 +16,16 @@ export async function signIn(email: string, password: string): Promise<AuthResul
     }
     return { error: error.message };
   }
-  return {};
+  const user = data.user;
+  const authUser: AuthUser | null = user
+    ? {
+        id: user.id,
+        email: user.email,
+        app_metadata: user.app_metadata ?? {},
+        user_metadata: user.user_metadata ?? {},
+      }
+    : null;
+  return { user: authUser, profile: null };
 }
 
 export async function signUp(
@@ -64,34 +73,4 @@ export async function resetPassword(email: string): Promise<AuthResult> {
     return { error: "Failed to send reset email. Please try again." };
   }
   return {};
-}
-
-export async function getOrCreateProfile(userId: string): Promise<Profile | null> {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .maybeSingle();
-  if (error || !data) return null;
-  return data as Profile;
-}
-
-export async function ensureProfile(
-  userId: string,
-  email: string,
-  fullName: string,
-): Promise<Profile | null> {
-  const existing = await getOrCreateProfile(userId);
-  if (existing) return existing;
-
-  const { data, error } = await supabase
-    .from("profiles")
-    .upsert(
-      { id: userId, email, full_name: fullName, role: "user" },
-      { onConflict: "id" },
-    )
-    .select()
-    .maybeSingle();
-  if (error || !data) return null;
-  return data as Profile;
 }

@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import * as authService from "@/services/authService";
+import { isAdminAccount } from "@/config/admin";
 import type { AuthUser, Profile, AuthContextValue, AuthResult } from "@/types/auth";
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -11,12 +12,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfile = useCallback(async (authUser: AuthUser) => {
-    const p = await authService.ensureProfile(
-      authUser.id,
-      authUser.email ?? "",
-      (authUser.user_metadata?.full_name as string) ?? "",
-    );
-    setProfile(p);
+    setProfile({
+      id: authUser.id,
+      email: authUser.email ?? "",
+      full_name: (authUser.user_metadata?.full_name as string) ?? "",
+      role: isAdminAccount(authUser.email, authUser.app_metadata?.role) ? "admin" : "user",
+      created_at: "",
+      updated_at: "",
+    });
   }, []);
 
   useEffect(() => {
@@ -25,6 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const u: AuthUser = {
           id: session.user.id,
           email: session.user.email,
+          app_metadata: session.user.app_metadata ?? {},
           user_metadata: session.user.user_metadata ?? {},
         };
         setUser(u);
@@ -40,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const u: AuthUser = {
             id: session.user.id,
             email: session.user.email,
+            app_metadata: session.user.app_metadata ?? {},
             user_metadata: session.user.user_metadata ?? {},
           };
           setUser(u);
@@ -67,12 +72,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const authUser: AuthUser = {
           id: u.id,
           email: u.email,
+          app_metadata: u.app_metadata ?? {},
           user_metadata: u.user_metadata ?? {},
         };
         setUser(authUser);
-        await loadProfile(authUser);
+        if (result.profile) {
+          setProfile(result.profile);
+        } else {
+          await loadProfile(authUser);
+        }
       }
-      return {};
+      return { user: result.user, profile: result.profile };
     },
     [loadProfile],
   );
@@ -99,11 +109,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return authService.resetPassword(email);
   }, []);
 
+  const role = profile?.role ?? (isAdminAccount(user?.email, user?.app_metadata?.role) ? "admin" : null);
+
   const value: AuthContextValue = {
     user,
     profile,
-    role: profile?.role ?? null,
-    isAdmin: profile?.role === "admin",
+    role,
+    isAdmin: role === "admin",
     isAuthenticated: !!user,
     loading,
     signIn,
