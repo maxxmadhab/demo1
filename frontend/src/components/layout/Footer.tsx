@@ -5,12 +5,12 @@ import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
 
 const EXPLORE_COLS = [
-  { label: "Collections", to: "/catalog" },
   { label: "New Arrivals", to: "/catalog?sort=newest" },
   { label: "Best Sellers", to: "/catalog?sort=popular" },
   { label: "Rings", to: "/catalog?category=Rings" },
   { label: "Necklaces", to: "/catalog?category=Necklaces" },
-  { label: "Bridal Jewelry", to: "/catalog?category=Bridal%20Jewelry" },
+  { label: "Earrings", to: "/catalog?category=Earrings" },
+  { label: "Bracelets", to: "/catalog?category=Bracelets" },
 ];
 
 const CARE_COLS = [

@@ -6,9 +6,9 @@ A production-quality premium fine jewellery catalog website. React + Vite + Type
 
 ```
 .
-├── frontend/   React SPA (catalog, filters, wishlist, quick view, collections, contacts, auth)
-├── backend/    Express 5 + TypeScript API (health check + future product endpoints)
-└── supabase/   SQL migrations (profiles table, RLS, triggers)
+├── frontend/   React SPA (catalog, filters, wishlist, quick view, contacts, auth, admin)
+├── backend/    Express 5 + TypeScript API (health + public catalog + admin product CRUD)
+└── supabase/   SQL migrations (profiles, products/product_images, RLS, storage)
 ```
 
 ## Phase 1: Authentication & Role System
@@ -32,6 +32,72 @@ This project includes full authentication with two roles (`user` and `admin`).
 - **`admin`** — assigned only through a secure administrative process (SQL/service role). There is **no** public UI to become admin.
 
 Admin privileges are validated **server-side** via Supabase database + RLS. Never trust client-side role state.
+
+---
+
+## Phase 2: Catalog Management (Admin CRUD + DB-backed storefront)
+
+The customer catalog now reads live from Supabase (`products` + `product_images` tables, public RLS),
+and an **admin-only** dashboard at `/admin` lets you create, edit, delete and upload images for products.
+Admin writes are enforced server-side via the backend API using the Supabase service-role key + RLS.
+
+### Database schema
+
+Run `supabase/migrations/20240101000001_create_products.sql` **after** the profiles migration
+(from Phase 1). It creates:
+
+- `public.products` — `name, slug (unique), category (CHECK for the 5 allowed), price (numeric),
+  material, gemstone, description, short_description, dimensions (jsonb), badge,
+  is_new, is_best_seller, featured, created_at, updated_at`
+- `public.product_images` — ordered image URLs per product (`product_id` FK → `products`, cascade)
+- a public storage bucket `product-images` for uploaded images
+- RLS policies: **public can read** products/images; **only admins** can insert/update/delete
+  products and their images (validated via `public.is_admin()` against `profiles.role`)
+
+### Categories
+
+Only these are allowed (enforced by a DB CHECK constraint and the UI):
+New Arrivals, Rings, Necklaces, Earrings, Bracelets. The old named collections
+(Celeste, Élan, Luna, etc.) have been removed.
+
+### Backend admin API
+
+All admin routes require a Supabase JWT `Authorization: Bearer <token>` whose account has
+`role = 'admin'` (verified server-side against `profiles`):
+
+| Method | Path                          | Description                              |
+| ------ | ----------------------------- | ---------------------------------------- |
+| GET    | `/api/products`               | Public catalog list (filters/sort/page)  |
+| GET    | `/api/products/:slug`         | Public single product                    |
+| GET    | `/api/admin/products`         | Admin list (search/category/sort)        |
+| POST   | `/api/admin/products`         | Admin create (with optional `images[]`)  |
+| GET    | `/api/admin/products/:id`     | Admin get one for editing                |
+| PUT    | `/api/admin/products/:id`     | Admin update (with optional `images[]`)  |
+| DELETE | `/api/admin/products/:id`     | Admin delete                             |
+| POST   | `/api/admin/upload`           | Upload an image (base64) → public URL    |
+| DELETE | `/api/admin/images`           | Delete an uploaded image by URL          |
+
+### Frontend admin routes
+
+| Route                           | Description                  |
+| ------------------------------- | ---------------------------- |
+| `/admin`                        | Dashboard (stats + links)    |
+| `/admin/products`               | Product table (search/filter)|
+| `/admin/products/new`           | Add a product                |
+| `/admin/products/:id/edit`      | Edit a product               |
+
+The admin UI lives under `frontend/src/components/admin/` (reusable: `AdminSidebar`,
+`AdminHeader`, `ProductTable`, `ProductFilters`, `ProductForm`, `ProductImageUploader`,
+`ProductImageGallery`, `DeleteProductDialog`) and `frontend/src/pages/admin/`.
+
+### Frontend env var
+
+In addition to the Supabase keys, the admin pages call the backend. Set:
+
+```env
+VITE_API_URL=http://localhost:4000   # local; production uses the deployed backend URL
+```
+`frontend/.env.production` already sets this to the deployed backend.
 
 ---
 
@@ -164,11 +230,13 @@ npm run dev          # http://localhost:4000
 
 ## API
 
-| Method | Path            | Description          |
-| ------ | --------------- | -------------------- |
-| GET    | `/api/health`   | Service health check |
+| Method | Path                  | Description          |
+| ------ | --------------------- | -------------------- |
+| GET    | `/api/health`         | Service health check |
+| GET    | `/api/products`       | Public catalog list  |
+| GET    | `/api/products/:slug` | Public single product |
 
-Product endpoints are stubbed and will be implemented in later phases.
+Admin (JWT + admin role) endpoints are listed in the Phase 2 section above.
 
 ---
 

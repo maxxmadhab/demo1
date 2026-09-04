@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import * as authService from "@/services/authService";
-import { isAdminAccount } from "@/config/admin";
 import type { AuthUser, Profile, AuthContextValue, AuthResult } from "@/types/auth";
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -12,14 +11,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfile = useCallback(async (authUser: AuthUser) => {
-    setProfile({
-      id: authUser.id,
-      email: authUser.email ?? "",
-      full_name: (authUser.user_metadata?.full_name as string) ?? "",
-      role: isAdminAccount(authUser.email, authUser.app_metadata?.role) ? "admin" : "user",
-      created_at: "",
-      updated_at: "",
-    });
+    setProfile(await authService.getProfile(authUser.id));
   }, []);
 
   useEffect(() => {
@@ -109,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return authService.resetPassword(email);
   }, []);
 
-  const role = profile?.role ?? (isAdminAccount(user?.email, user?.app_metadata?.role) ? "admin" : null);
+  const role = profile?.role ?? null;
 
   const value: AuthContextValue = {
     user,

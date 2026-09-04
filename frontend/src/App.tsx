@@ -8,7 +8,6 @@ import { LoadingState } from "@/components/shared/States";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const CatalogPage = lazy(() => import("@/pages/CatalogPage"));
-const CollectionPage = lazy(() => import("@/pages/CollectionPage"));
 const ProductDetailPage = lazy(() => import("@/pages/ProductDetailPage"));
 const WishlistPage = lazy(() => import("@/pages/WishlistPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
@@ -19,6 +18,8 @@ const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
 const AdminLoginPage = lazy(() => import("@/pages/admin/AdminLoginPage"));
 const AdminDashboardPage = lazy(() => import("@/pages/admin/AdminDashboardPage"));
+const AdminProductListPage = lazy(() => import("@/pages/admin/AdminProductListPage"));
+const AdminProductFormPage = lazy(() => import("@/pages/admin/AdminProductFormPage"));
 
 function PageFallback() {
   return (
@@ -47,14 +48,6 @@ export default function App() {
             element={
               <Suspense fallback={<PageFallback />}>
                 <CatalogPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/collection/:collection"
-            element={
-              <Suspense fallback={<PageFallback />}>
-                <CollectionPage />
               </Suspense>
             }
           />
@@ -135,6 +128,36 @@ export default function App() {
               <AdminGuard>
                 <Suspense fallback={<PageFallback />}>
                   <AdminDashboardPage />
+                </Suspense>
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="products"
+            element={
+              <AdminGuard>
+                <Suspense fallback={<PageFallback />}>
+                  <AdminProductListPage />
+                </Suspense>
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="products/new"
+            element={
+              <AdminGuard>
+                <Suspense fallback={<PageFallback />}>
+                  <AdminProductFormPage />
+                </Suspense>
+              </AdminGuard>
+            }
+          />
+          <Route
+            path="products/:id/edit"
+            element={
+              <AdminGuard>
+                <Suspense fallback={<PageFallback />}>
+                  <AdminProductFormPage />
                 </Suspense>
               </AdminGuard>
             }

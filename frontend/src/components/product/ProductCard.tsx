@@ -110,7 +110,7 @@ export function ProductCard({ product, priority, className }: ProductCardProps) 
       {/* Info */}
       <div className="mt-4 flex flex-col gap-1">
         <p className="font-body text-[0.62rem] font-medium uppercase tracking-[0.22em] text-gold-deep/90">
-          {product.collection}
+          {product.category}
         </p>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">

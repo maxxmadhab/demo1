@@ -10,7 +10,7 @@ export const createServer = () => {
 
   app.disable("x-powered-by");
   app.use(cors(corsOptions));
-  app.use(express.json({ limit: "1mb" }));
+  app.use(express.json({ limit: "12mb" }));
   app.use(express.urlencoded({ extended: true }));
 
   app.get("/", (_req, res) => {

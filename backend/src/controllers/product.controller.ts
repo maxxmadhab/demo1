@@ -7,10 +7,6 @@ export const productController = {
   async list(req: Request, res: Response) {
     const result = await productService.list({
       category: firstString(req.query.category),
-      collection: firstString(req.query.collection),
-      material: firstString(req.query.material),
-      gemstone: firstString(req.query.gemstone),
-      occasion: firstString(req.query.occasion),
       search: firstString(req.query.search),
       minPrice: req.query.minPrice !== undefined ? Number(req.query.minPrice) : undefined,
       maxPrice: req.query.maxPrice !== undefined ? Number(req.query.maxPrice) : undefined,
@@ -29,13 +25,6 @@ export const productController = {
       throw ApiError.notFound("Product not found");
     }
     res.status(200).json(product);
-  },
-
-  /** GET /api/collections/:collection/products - pieces in a collection. */
-  async getByCollection(req: Request, res: Response) {
-    const collection = firstString(req.params.collection);
-    const items = await productService.getByCollection(collection ?? "");
-    res.status(200).json(items);
   },
 };
 

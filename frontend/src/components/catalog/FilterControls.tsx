@@ -50,14 +50,6 @@ export function FilterControls({
         count={filters.categories.length}
       />
       <FilterDropdown
-        label="Collection"
-        options={options.collectionOptions}
-        selected={filters.collections}
-        onChange={(collections) => update({ collections })}
-        count={filters.collections.length}
-        searchable
-      />
-      <FilterDropdown
         label="Material"
         options={options.materialOptions}
         selected={filters.materials}

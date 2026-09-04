@@ -100,7 +100,7 @@ export function BagDrawer() {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <p className="font-body text-[0.6rem] font-medium uppercase tracking-[0.2em] text-gold-deep">
-                              {product.collection}
+                              {product.category}
                             </p>
                             <Link
                               to={`/product/${product.slug}`}

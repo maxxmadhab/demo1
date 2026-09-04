@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import type { AuthResult, AuthUser } from "@/types/auth";
+import type { AuthResult, AuthUser, Profile } from "@/types/auth";
 
 const appOrigin = () =>
   (import.meta.env.VITE_SITE_URL as string | undefined)?.replace(/\/$/, "") ||
@@ -25,7 +25,8 @@ export async function signIn(email: string, password: string): Promise<AuthResul
         user_metadata: user.user_metadata ?? {},
       }
     : null;
-  return { user: authUser, profile: null };
+  const profile = authUser ? await getProfile(authUser.id) : null;
+  return { user: authUser, profile };
 }
 
 export async function signUp(
@@ -73,4 +74,15 @@ export async function resetPassword(email: string): Promise<AuthResult> {
     return { error: "Failed to send reset email. Please try again." };
   }
   return {};
+}
+
+export async function getProfile(userId: string): Promise<Profile | null> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id,email,full_name,role,created_at,updated_at")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return data as Profile;
 }

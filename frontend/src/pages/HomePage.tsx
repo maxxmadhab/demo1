@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import type { Product } from "@/types/product";
 import { getNewArrivals, getBestSellers } from "@/services/productService";
 import { Hero } from "@/components/home/Hero";
-import { FeaturedCollections } from "@/components/home/FeaturedCollections";
 import { ProductRail } from "@/components/home/ProductRail";
-import { JewelryStoryScroll } from "@/components/home/JewelryStoryScroll";
-import { ContinueNavigation } from "@/components/home/ContinueNavigation";
 import { EditorialSection } from "@/components/home/EditorialSection";
 import { Craftsmanship } from "@/components/home/Craftsmanship";
 import { LoadingState } from "@/components/shared/States";
@@ -40,18 +37,12 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <FeaturedCollections />
       <ProductRail
         eyebrow="New this season"
         title="New arrivals"
         link={{ to: "/catalog?sort=newest", label: "View all new pieces" }}
         products={newArrivals}
         className="py-20 lg:py-24"
-      />
-      <JewelryStoryScroll />
-      <ContinueNavigation
-        nextCollection={{ name: "Élan", to: "/collection/elan" }}
-        exploreTargetId="jwel-explore-more"
       />
       <ProductRail
         id="jwel-explore-more"

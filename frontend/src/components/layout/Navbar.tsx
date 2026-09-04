@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { motion, useReducedMotion, AnimatePresence } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { useWishlist } from "@/context/WishlistContext";
 import { useBag } from "@/context/BagContext";
@@ -8,7 +8,6 @@ import { useUI } from "@/context/UIContext";
 import { useAuth } from "@/hooks/useAuth";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
-import { collections as collectionsData } from "@/data/collections";
 import { cn } from "@/utils/cn";
 
 const NAV_LINKS = [
@@ -26,22 +25,6 @@ export function Navbar() {
   const { setSearchOpen, setMobileMenuOpen, setBagOpen } = useUI();
   const { isAuthenticated, isAdmin, signOut } = useAuth();
   const reducedMotion = useReducedMotion();
-  const [collectionsOpen, setCollectionsOpen] = useState(false);
-  const closeTimer = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    };
-  }, []);
-
-  const openCollections = () => {
-    if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    setCollectionsOpen(true);
-  };
-  const scheduleClose = () => {
-    closeTimer.current = window.setTimeout(() => setCollectionsOpen(false), 160);
-  };
 
   return (
     <header
@@ -73,68 +56,6 @@ export function Navbar() {
             >
               Home
             </NavLink>
-
-            {/* Collections dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={openCollections}
-              onMouseLeave={scheduleClose}
-              onFocus={openCollections}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                  scheduleClose();
-                }
-              }}
-            >
-              <NavLink
-                to="/catalog"
-                className={({ isActive }) =>
-                  cn(
-                    "inline-flex items-center gap-1.5 font-body text-[0.7rem] font-medium uppercase tracking-[0.18em] transition-colors duration-300",
-                    isActive ? "text-gold-deep" : "text-charcoal/90 hover:text-gold-deep"
-                  )
-                }
-              >
-                Collections
-                <Icon
-                  name="chevron-down"
-                  size={12}
-                  className={cn("transition-transform duration-300", collectionsOpen && "rotate-180")}
-                />
-              </NavLink>
-
-              <AnimatePresence>
-                {collectionsOpen && (
-                  <motion.div
-                    initial={reducedMotion ? false : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={reducedMotion ? undefined : { opacity: 0, y: 10 }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
-                    className="absolute left-1/2 top-full -translate-x-1/2 pt-5"
-                  >
-                    <div className="w-56 border border-charcoal/[0.07] bg-ivory p-2 shadow-lift">
-                      {collectionsData.map((c) => (
-                        <Link
-                          key={c.slug}
-                          to={`/collection/${c.slug}`}
-                          className="block px-4 py-2.5 font-body text-xs font-normal tracking-[0.08em] text-charcoal/80 transition-colors duration-200 hover:bg-sand/70 hover:text-charcoal"
-                        >
-                          {c.name}
-                        </Link>
-                      ))}
-                      <div className="mt-1 border-t border-charcoal/[0.07] pt-2">
-                        <Link
-                          to="/catalog"
-                          className="block px-4 py-2 font-body text-[0.65rem] font-medium uppercase tracking-[0.18em] text-gold-deep hover:text-gold"
-                        >
-                          View all
-                        </Link>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
 
             {NAV_LINKS.map((link) => (
               <NavLink

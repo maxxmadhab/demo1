@@ -100,7 +100,7 @@ export function QuickViewModal() {
               {/* Details */}
               <div className="flex flex-col overflow-y-auto p-6 sm:p-9 md:p-10">
                 <p className="font-body text-[0.62rem] font-medium uppercase tracking-[0.24em] text-gold-deep">
-                  {quickViewProduct.collection} · {quickViewProduct.category}
+                  {quickViewProduct.category}
                 </p>
                 <h2 className="mt-2 font-display text-2xl font-medium leading-snug text-charcoal sm:text-3xl">
                   {quickViewProduct.name}
@@ -122,31 +122,6 @@ export function QuickViewModal() {
                   {quickViewProduct.shortDescription}
                 </p>
 
-                {/* Variants */}
-                {quickViewProduct.variants.length > 0 && (
-                  <div className="mt-6">
-                    <p className="font-body text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-stone">
-                      {quickViewProduct.variants[0].name}
-                    </p>
-                    <div className="mt-2.5 flex flex-wrap gap-2">
-                      {quickViewProduct.variants[0].name
-                        .split("·")
-                        .slice(1)
-                        .join("")
-                        .split("/")
-                        .map((v) => v.trim())
-                        .filter(Boolean)
-                        .map((v) => (
-                          <span
-                            key={v}
-                            className="flex h-9 min-w-11 items-center justify-center border border-charcoal/20 px-3 font-body text-xs text-charcoal/80"
-                          >
-                            {v}
-                          </span>
-                        ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* Thumbs */}
                 {quickViewProduct.images.length > 1 && (
@@ -188,7 +163,7 @@ export function QuickViewModal() {
                   </div>
                   <div className="mt-4 flex items-center justify-center gap-5">
                     <Link
-                      to={`/contact?product=${encodeURIComponent(quickViewProduct.name)}&collection=${encodeURIComponent(quickViewProduct.collection)}`}
+                      to={`/contact?product=${encodeURIComponent(quickViewProduct.name)}&category=${encodeURIComponent(quickViewProduct.category)}`}
                       onClick={handleClose}
                       className="inline-flex items-center gap-2 font-body text-[0.7rem] font-medium uppercase tracking-[0.2em] text-gold-deep underline-offset-4 transition-colors hover:text-charcoal hover:underline"
                     >

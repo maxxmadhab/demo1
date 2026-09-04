@@ -1,10 +1,9 @@
 export type Category =
+  | "New Arrivals"
   | "Rings"
-  | "Earrings"
   | "Necklaces"
-  | "Bracelets"
-  | "Pendants"
-  | "Bridal Jewelry";
+  | "Earrings"
+  | "Bracelets";
 
 export type Material =
   | "18K Gold"
@@ -12,7 +11,8 @@ export type Material =
   | "Platinum"
   | "Rose Gold"
   | "White Gold"
-  | "Yellow Gold";
+  | "Yellow Gold"
+  | string;
 
 export type Gemstone =
   | "Diamond"
@@ -25,24 +25,14 @@ export type Gemstone =
   | "Topaz"
   | "Aquamarine"
   | "Garnet"
-  | "No Gemstone";
+  | "No Gemstone"
+  | string;
 
-export type Occasion =
-  | "Everyday"
-  | "Bridal"
-  | "Statement"
-  | "Gifting"
-  | "Occasion";
+export type Occasion = string;
 
 export type Badge = "New" | "Best Seller" | "Limited" | "Iconic" | "Bridal";
 
-export interface ProductVariant {
-  id: string;
-  name: string;
-  material?: Material;
-  price?: number;
-  available: boolean;
-}
+export type ProductVariant = Record<string, never>;
 
 export interface ProductDimensions {
   width?: string;
@@ -57,10 +47,9 @@ export interface Product {
   slug: string;
   name: string;
   category: Category;
-  collection: string;
   price: number;
-  material: Material;
-  gemstone: Gemstone;
+  material: string;
+  gemstone: string;
   description: string;
   shortDescription: string;
   images: string[];
@@ -69,6 +58,34 @@ export interface Product {
   isNew?: boolean;
   isBestSeller?: boolean;
   dimensions: ProductDimensions;
-  variants: ProductVariant[];
-  occasion: Occasion;
+  createdAt?: string;
+  updatedAt?: string;
+
+  /** Deprecated — retained for the legacy customer UI; always empty for DB products. */
+  collection?: string;
+  variants?: ProductVariant[];
+  occasion?: Occasion;
 }
+
+export interface ProductFilters {
+  categories?: string[];
+  searchTerm?: string;
+  priceRange?: [number, number] | null;
+  sort?: SortKey;
+
+  /** Deprecated filter dimensions — kept for compatibility, always empty for DB products. */
+  collections?: string[];
+  materials?: string[];
+  gemstones?: string[];
+  occasions?: string[];
+}
+
+export type SortKey = "featured" | "newest" | "popular" | "price-asc" | "price-desc";
+
+export interface PaginatedProducts {
+  data: Product[];
+  page: number;
+  perPage: number;
+  total: number;
+}
+

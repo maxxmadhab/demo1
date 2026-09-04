@@ -1,23 +1,19 @@
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useUI } from "@/context/UIContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/hooks/useAuth";
 import { useEscapeKey } from "@/hooks/useOverlayBehavior";
 import { siteConfig } from "@/config/site";
-import { collections as collectionsData } from "@/data/collections";
 import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
-import { cn } from "@/utils/cn";
 
 const CATEGORY_LINKS = [
   { label: "Rings", to: "/catalog?category=Rings" },
   { label: "Necklaces", to: "/catalog?category=Necklaces" },
   { label: "Earrings", to: "/catalog?category=Earrings" },
   { label: "Bracelets", to: "/catalog?category=Bracelets" },
-  { label: "Pendants", to: "/catalog?category=Pendants" },
-  { label: "Bridal Jewelry", to: "/catalog?category=Bridal%20Jewelry" },
 ];
 
 export function MobileMenu() {
@@ -25,13 +21,8 @@ export function MobileMenu() {
   const { count } = useWishlist();
   const { isAuthenticated, isAdmin, signOut } = useAuth();
   const reducedMotion = useReducedMotion();
-  const [accordion, setAccordion] = useState<string | null>(null);
 
   useEscapeKey(mobileMenuOpen, () => setMobileMenuOpen(false));
-
-  useEffect(() => {
-    if (!mobileMenuOpen) setAccordion(null);
-  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const onResize = () => {
@@ -95,50 +86,6 @@ export function MobileMenu() {
               >
                 Home
               </Link>
-
-              {/* Collections accordion */}
-              <div>
-                <button
-                  type="button"
-                  onClick={() => setAccordion(accordion === "collections" ? null : "collections")}
-                  aria-expanded={accordion === "collections"}
-                  className="flex w-full items-center justify-between py-3 font-display text-3xl font-medium text-charcoal"
-                >
-                  Collections
-                  <Icon
-                    name="chevron-down"
-                    size={20}
-                    className={cn(
-                      "transition-transform duration-300",
-                      accordion === "collections" && "rotate-180"
-                    )}
-                  />
-                </button>
-                <AnimatePresence>
-                  {accordion === "collections" && (
-                    <motion.div
-                      initial={reducedMotion ? false : { height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={reducedMotion ? undefined : { height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="grid grid-cols-2 gap-x-4 pb-4 pt-1">
-                        {collectionsData.map((c) => (
-                          <Link
-                            key={c.slug}
-                            to={`/collection/${c.slug}`}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="py-2 font-body text-[0.95rem] font-light text-charcoal/80"
-                          >
-                            {c.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
 
               <Link
                 to="/catalog?sort=newest"

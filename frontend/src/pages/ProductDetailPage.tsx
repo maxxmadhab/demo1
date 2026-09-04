@@ -29,7 +29,6 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [related, setRelated] = useState<Product[]>([]);
-  const [selectedVariant, setSelectedVariant] = useState<string>("");
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
@@ -55,8 +54,6 @@ export default function ProductDetailPage() {
     };
   }, [slug]);
 
-  const variantOptions = product?.variants[0]?.name.split("Â·").slice(1).join("").split("/").map((v) => v.trim()).filter(Boolean) ?? [];
-
   const handleAddToBag = () => {
     if (!product) return;
     addToBag(product);
@@ -64,7 +61,7 @@ export default function ProductDetailPage() {
     window.setTimeout(() => setAdded(false), 2200);
   };
 
-  const enquiryHref = `/contact?product=${encodeURIComponent(product?.name ?? "")}&collection=${encodeURIComponent(product?.collection ?? "")}`;
+  const enquiryHref = `/contact?product=${encodeURIComponent(product?.name ?? "")}&category=${encodeURIComponent(product?.category ?? "")}`;
 
   if (loading) {
     return (
@@ -110,15 +107,6 @@ export default function ProductDetailPage() {
             <Link to="/catalog" className="transition-colors hover:text-gold-deep">Catalogue</Link>
           </li>
           <li aria-hidden="true">/</li>
-          <li>
-            <Link
-              to={`/collection/${product.collection.toLowerCase()}`}
-              className="transition-colors hover:text-gold-deep"
-            >
-              {product.collection}
-            </Link>
-          </li>
-          <li aria-hidden="true">/</li>
           <li className="max-w-40 truncate text-charcoal">{product.name}</li>
         </ol>
       </nav>
@@ -135,7 +123,7 @@ export default function ProductDetailPage() {
           >
             <div className="flex items-center gap-3">
               <p className="font-body text-[0.65rem] font-medium uppercase tracking-[0.26em] text-gold-deep">
-                {product.collection} Â· {product.category}
+                {product.category}
               </p>
               {product.badge && <Badge tone="dark">{product.badge}</Badge>}
             </div>
@@ -161,32 +149,6 @@ export default function ProductDetailPage() {
                 <Spec key={s.label} label={s.label} value={s.value} />
               ))}
             </dl>
-
-            {/* Variants */}
-            {variantOptions.length > 0 && (
-              <div className="mt-7">
-                <p className="font-body text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-stone">
-                  {product.variants[0].name.split("Â·")[0].trim()}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2.5">
-                  {variantOptions.map((v) => (
-                    <button
-                      key={v}
-                      type="button"
-                      aria-pressed={selectedVariant === v}
-                      onClick={() => setSelectedVariant(v)}
-                      className={`min-w-12 border px-4 py-2.5 font-body text-xs transition-colors duration-300 ${
-                        selectedVariant === v
-                          ? "border-charcoal bg-charcoal text-ivory"
-                          : "border-charcoal/25 text-charcoal/80 hover:border-charcoal/60"
-                      }`}
-                    >
-                      {v}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* CTA row */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">

@@ -185,7 +185,7 @@ export function SearchOverlay() {
                                   {product.name}
                                 </Link>
                                 <p className="mt-0.5 font-body text-xs font-light text-stone">
-                                  {product.collection} · {product.material}
+                                  {product.category} · {product.material}
                                 </p>
                               </div>
                               <p className="shrink-0 font-body text-sm font-medium text-charcoal">

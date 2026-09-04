@@ -6,6 +6,5 @@ const router = Router();
 
 router.get("/products", validateProductQuery, productController.list);
 router.get("/products/:slug", productController.getBySlug);
-router.get("/collections/:collection/products", productController.getByCollection);
 
 export default router;

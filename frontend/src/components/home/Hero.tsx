@@ -52,8 +52,8 @@ export function Hero() {
           <Button to="/catalog" variant="light" size="lg">
             Explore the collection
           </Button>
-          <Button to="/collection/celeste" variant="ghost" size="lg" className="text-ivory hover:text-champagne">
-            The Celeste story
+          <Button to="/catalog?sort=newest" variant="ghost" size="lg" className="text-ivory hover:text-champagne">
+            Discover new arrivals
           </Button>
         </div>
       </motion.div>

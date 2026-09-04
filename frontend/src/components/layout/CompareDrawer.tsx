@@ -26,7 +26,7 @@ const ROWS: { label: string; get: (p: Product) => string }[] = [
   { label: "Price", get: (p) => formatPrice(p.price) },
   { label: "Material", get: (p) => p.material },
   { label: "Gemstone", get: (p) => p.gemstone },
-  { label: "Occasion", get: (p) => p.occasion },
+  { label: "Occasion", get: (p) => p.occasion ?? "—" },
   { label: "Width", get: (p) => p.dimensions.width ?? "—" },
   { label: "Weight", get: (p) => p.dimensions.weight ?? "—" },
 ];
